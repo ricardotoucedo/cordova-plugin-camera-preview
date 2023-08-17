@@ -232,12 +232,11 @@
                 [alertController addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Settings", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:nil];
                 }]];
-                [self presentViewController:alertController animated:YES completion:nil];
+                [self.viewController presentViewController:alertController animated:YES completion:nil];
             });
         }
     }];
 }
-
 @end
 
 // Find a camera with the specified AVCaptureDevicePosition, returning nil if one is not found
