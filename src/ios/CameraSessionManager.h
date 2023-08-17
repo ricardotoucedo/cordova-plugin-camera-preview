@@ -23,11 +23,3 @@
 @property (nonatomic, assign) id delegate;
 
 @end
-
-@interface CameraAccessViewController : UIViewController
-
-@property (nonatomic, strong) UIViewController *viewController;
-
-- (void)checkDeviceAuthorizationStatus;
-
-@end
