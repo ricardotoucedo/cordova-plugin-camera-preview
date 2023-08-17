@@ -207,40 +207,6 @@
   }
 }
 
-@interface CameraAccessViewController : UIViewController
-
-@property (nonatomic, strong) UIViewController *viewController;
-
-- (void)checkDeviceAuthorizationStatus;
-
-@end
-
-@implementation CameraAccessViewController
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Additional setup if needed
-}
-
-- (void)checkDeviceAuthorizationStatus
-{    
-    NSString *mediaType = AVMediaTypeVideo;
-
-    [AVCaptureDevice requestAccessForMediaType:mediaType completionHandler:^(BOOL granted) {
-        if (!granted) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"] message:NSLocalizedString(@"Access to the camera has been prohibited; please enable it in the Settings app to continue.", nil) preferredStyle:UIAlertControllerStyleAlert];
-                [alertController addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleDefault handler:nil]];
-                [alertController addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Settings", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:nil];
-                }]];
-                [self.viewController presentViewController:alertController animated:YES completion:nil];
-            });
-        }
-    }];
-}
-@end
-
 // Find a camera with the specified AVCaptureDevicePosition, returning nil if one is not found
 - (AVCaptureDevice *) cameraWithPosition:(AVCaptureDevicePosition) position
 {
@@ -251,6 +217,36 @@
       return device;
   }
   return nil;
+}
+
+@end
+
+
+@implementation CameraAccessViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Additional setup if needed
+}
+
+- (void)checkDeviceAuthorizationStatus {
+    NSString *mediaType = AVMediaTypeVideo;
+
+    [AVCaptureDevice requestAccessForMediaType:mediaType completionHandler:^(BOOL granted) {
+        if (!granted) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"] message:NSLocalizedString(@"Access to the camera has been prohibited; please enable it in the Settings app to continue.", nil) preferredStyle:UIAlertControllerStyleAlert];
+                [alertController addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleDefault handler:nil]];
+                [alertController addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Settings", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    NSURL *settingsURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+                    if ([[UIApplication sharedApplication] canOpenURL:settingsURL]) {
+                        [[UIApplication sharedApplication] openURL:settingsURL options:@{} completionHandler:nil];
+                    }
+                }]];
+                [self.viewController presentViewController:alertController animated:YES completion:nil];
+            });
+        }
+    }];
 }
 
 @end
