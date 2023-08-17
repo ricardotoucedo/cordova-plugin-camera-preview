@@ -1,5 +1,6 @@
 #import <CoreImage/CoreImage.h>
 #import <AVFoundation/AVFoundation.h>
+#import <UIKit/UIKit.h>
 
 @interface CameraSessionManager : NSObject
 
