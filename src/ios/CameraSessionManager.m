@@ -209,6 +209,8 @@
 
 @interface CameraAccessViewController : UIViewController
 
+@property (nonatomic, strong) UIViewController *viewController;
+
 - (void)checkDeviceAuthorizationStatus;
 
 @end
