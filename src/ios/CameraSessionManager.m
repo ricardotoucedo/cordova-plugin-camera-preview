@@ -224,11 +224,6 @@
 
 @implementation CameraAccessViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Additional setup if needed
-}
-
 - (void)checkDeviceAuthorizationStatus {
     NSString *mediaType = AVMediaTypeVideo;
 
