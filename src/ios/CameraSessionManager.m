@@ -219,29 +219,31 @@
   return nil;
 }
 
-@end
-
-
-@implementation CameraAccessViewController
-
 - (void)checkDeviceAuthorizationStatus {
-    NSString *mediaType = AVMediaTypeVideo;
-
-    [AVCaptureDevice requestAccessForMediaType:mediaType completionHandler:^(BOOL granted) {
-        if (!granted) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"] message:NSLocalizedString(@"Access to the camera has been prohibited; please enable it in the Settings app to continue.", nil) preferredStyle:UIAlertControllerStyleAlert];
-                [alertController addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"OK", nil) style:UIAlertActionStyleDefault handler:nil]];
-                [alertController addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Settings", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                    NSURL *settingsURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-                    if ([[UIApplication sharedApplication] canOpenURL:settingsURL]) {
-                        [[UIApplication sharedApplication] openURL:settingsURL options:@{} completionHandler:nil];
-                    }
-                }]];
-                [self.viewController presentViewController:alertController animated:YES completion:nil];
-            });
-        }
-    }];
+      NSString *mediaType = AVMediaTypeVideo;
+  
+  [AVCaptureDevice requestAccessForMediaType:mediaType completionHandler:^(BOOL granted) {
+      if (!granted) {
+          dispatch_async(dispatch_get_main_queue(), ^{
+              UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"]
+                                                                                       message:@"Access to the camera has been prohibited; please enable it in the Settings app to continue."
+                                                                                preferredStyle:UIAlertControllerStyleAlert];
+              
+              UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+              UIAlertAction *settingsAction = [UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                  NSURL *settingsURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+                  if ([[UIApplication sharedApplication] canOpenURL:settingsURL]) {
+                      [[UIApplication sharedApplication] openURL:settingsURL options:@{} completionHandler:nil];
+                  }
+              }];
+              
+              [alertController addAction:okAction];
+              [alertController addAction:settingsAction];
+              
+              [self.viewController presentViewController:alertController animated:YES completion:nil];
+          });
+      }
+  }];
 }
 
 @end
