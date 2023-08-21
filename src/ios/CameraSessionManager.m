@@ -231,6 +231,14 @@
                                                                                          message:@"Access to the camera has been prohibited; please enable it in the Settings app to continue."
                                                                                   preferredStyle:UIAlertControllerStyleAlert];
                 
+                UIAlertAction *settingsAction = [UIAlertAction actionWithTitle:@"Settings" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                    NSURL *settingsURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+                    if ([[UIApplication sharedApplication] canOpenURL:settingsURL]) {
+                        [[UIApplication sharedApplication] openURL:settingsURL options:@{} completionHandler:nil];
+                    }
+                }];
+                [alertController addAction:settingsAction];
+                
                 UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
                 [alertController addAction:okAction];
                 
