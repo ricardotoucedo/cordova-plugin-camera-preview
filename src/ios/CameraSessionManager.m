@@ -44,7 +44,10 @@
   // and the user will be notified. User only has to accep once.
   [self checkDeviceAuthorizationStatus];
 
-  dispatch_async(self.sessionQueue, ^{
+   AVAuthorizationStatus authorizationStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+
+    if (authorizationStatus == AVAuthorizationStatusAuthorized) {
+         dispatch_async(self.sessionQueue, ^{
       NSError *error = nil;
 
       NSLog(@"defaultCamera: %@", defaultCamera);
@@ -98,6 +101,8 @@
 
       [self updateOrientation:[self getCurrentOrientation]];
   });
+    }
+ 
 }
 
 - (void) updateOrientation:(AVCaptureVideoOrientation)orientation
